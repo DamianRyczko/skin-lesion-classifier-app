@@ -1,0 +1,35 @@
+# Runs before every commit, with the tool versions pinned in uv.lock.
+# Installed by `mise run setup`, or `uv run pre-commit install`.
+# Browser tests are left out: they take a minute, run them with `mise run e2e`.
+exclude: ^\.claude/
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: unsupported
+        types: [python]
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: unsupported
+        types: [python]
+      - id: ui-style
+        name: UI style rules
+        entry: uv run python .claude/skills/streamlit-neubrutal-ui/scripts/check_style.py app.py ui_demo.py model.py pages core
+        language: unsupported
+        types: [python]
+        pass_filenames: false
+      - id: mypy
+        name: mypy
+        entry: uv run mypy
+        language: unsupported
+        types: [python]
+        pass_filenames: false
+      - id: pytest
+        name: unit and app tests
+        entry: uv run pytest tests/unit tests/apptest -q
+        language: unsupported
+        types: [python]
+        pass_filenames: false

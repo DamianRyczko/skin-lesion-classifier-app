@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+test-results/
+weights/*
+!weights/README.md
+!weights/skin_lesions_app/
+weights/skin_lesions_app/*
+!weights/skin_lesions_app/.gitkeep
+assets/samples/*
+!assets/samples/README.md

@@ -1,0 +1,56 @@
+[project]
+name = "skin-lesion-classifier-app"
+version = "0.1.0"
+description = "Klasyfikacja zmian skórnych HAM10000: aplikacja Streamlit"
+requires-python = ">=3.14"
+dependencies = [
+    "loguru>=0.7",
+    "numpy>=2.5",
+    "onnxruntime>=1.31",
+    "pillow>=13",
+    "streamlit==1.66.1",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.1",
+    "onnx>=1.23",
+    "pre-commit>=4.7.0",
+    "pytest>=9.2.0",
+    "pytest-playwright>=0.10.0",
+    "ruff>=0.17.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 130
+extend-exclude = [".claude"]
+force-exclude = true    # also when the editor or pre-commit names a file directly
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"ui/theme.py" = ["E501"]    # CSS
+"scripts/*" = ["E501"]      # sprite data and palettes
+
+[tool.mypy]
+python_version = "3.14"
+files = ["app.py", "ui_demo.py", "model.py", "skin_lesion_app", "core", "pages", "ui", "scripts", "tests"]
+explicit_package_bases = true
+mypy_path = ".:tests/e2e"
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+
+[[tool.mypy.overrides]]
+module = ["app", "ui_demo", "model", "skin_lesion_app.*", "core.*", "pages.*", "ui.*"]
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["onnxruntime.*", "pandas.*", "kagglehub.*"]   # no type information; pandas and kagglehub are Colab-only
+ignore_missing_imports = true

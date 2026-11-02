@@ -1,0 +1,9 @@
+services:
+  skin-lesion-classifier-app:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./weights:/app/weights:ro
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}

@@ -1,0 +1,43 @@
+# First time:  mise trust && mise install && mise run setup
+# Then:        mise run dev
+# mise provides uv; uv provides Python (.python-version) and the dependencies (uv.lock).
+
+[tools]
+uv = "0.12.5"
+
+[tasks.setup]
+description = "Install Python, dependencies and the git hooks"
+run = ["uv sync", "uv run pre-commit install"]
+
+[tasks.dev]
+description = "Run the app; logs appear in this terminal"
+run = "uv run streamlit run app.py"
+
+[tasks.test]
+description = "Unit and app tests"
+run = "uv run pytest tests/unit tests/apptest"
+
+[tasks.e2e]
+description = "Browser tests (first run downloads Chromium)"
+run = ["uv run playwright install chromium", "uv run pytest tests/e2e"]
+
+[tasks.format]
+description = "Format and auto-fix with ruff"
+run = ["uv run ruff check --fix .", "uv run ruff format ."]
+
+[tasks.check]
+description = "Ruff, mypy and UI style rules, without changing files"
+run = [
+  "uv run ruff check .",
+  "uv run ruff format --check .",
+  "uv run mypy",
+  "uv run python .claude/skills/streamlit-neubrutal-ui/scripts/check_style.py app.py ui_demo.py model.py pages core",
+]
+
+[tasks.sprites]
+description = "Regenerate the pixel art"
+run = "uv run python scripts/make_sprites.py"
+
+[tasks.docker]
+description = "Build and run in Docker"
+run = "docker compose up --build"
