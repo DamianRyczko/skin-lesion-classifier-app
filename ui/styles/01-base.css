@@ -99,18 +99,11 @@ h1 {
   image-rendering: pixelated;
 }
 
+/* repeated sideways, so it covers a window of any width */
 .nb-sky {
-  display: flex;
   height: 108px;
-  overflow: hidden;
-  background: var(--nb-bg);
-}
-
-.nb-sky img {
-  flex: none;
-  width: 960px;
-  height: 108px;
-  display: block;
+  background: var(--nb-sky) left bottom / 960px 108px repeat-x var(--nb-bg);
+  image-rendering: pixelated;
 }
 
 .nb-brand {

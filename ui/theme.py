@@ -22,7 +22,7 @@ def get_palette_css(theme: str) -> str:
     colors = "".join(f"{css_var(name)}:{value};" for name, value in THEMES[theme].items())
     sprites = "".join(
         f'--nb-{var}:url("{pixel(name)}");'
-        for var, name in (("cat", f"cat-doctor-{theme}"), ("walk", f"cat-walk-{theme}"), ("paw", "paw"))
+        for var, name in (("sky", f"sky-{theme}"), ("cat", f"cat-doctor-{theme}"), ("walk", f"cat-walk-{theme}"), ("paw", "paw"))
     )
     return ":root{" + colors + sprites + "}"
 

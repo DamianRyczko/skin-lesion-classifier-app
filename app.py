@@ -28,7 +28,7 @@ if "seen" not in st.session_state:
 nav = st.navigation([st.Page("pages/analyze.py", title="Analiza", default=True)], position="hidden")
 
 with st.container(key="nbtop", gap=None):
-    ui.skyline(st.session_state.theme)
+    ui.skyline()
     with st.container(key="nbbar", horizontal=True):
         ui.brand("KLASYFIKATOR ZMIAN SKÓRNYCH", st.session_state.theme)
         st.segmented_control(

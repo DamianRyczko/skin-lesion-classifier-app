@@ -20,7 +20,7 @@ When you add a component: put it in `ui/components.py` and add it here. Only kee
 | Call | What |
 |---|---|
 | `setup_page(title, theme, icon=None)` | Page config + global CSS + active palette. Once, first, in `app.py`. |
-| `ui.skyline(theme)` / `ui.brand(name, theme)` | Cat city strip and logo of the top bar. |
+| `ui.skyline()` / `ui.brand(name, theme)` | Cat city strip and logo of the top bar. |
 | `ui.page_header(title, side=[...])` | Big uppercase mono H1. One per page. |
 | `ui.disclaimer(title, text)` | Dashed bar with a warning tag. |
 

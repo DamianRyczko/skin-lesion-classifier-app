@@ -83,10 +83,9 @@ def split(key: str, spec: Sequence[float], gap: Literal["small", "medium", "larg
 # ---------------------------------------------------------------- page chrome
 
 
-def skyline(theme: str) -> None:
-    # Twice over, so wide screens stay covered.
-    img = f'<img class="nb-px" src="{pixel(f"sky-{theme}")}" alt="">'
-    html(f'<div class="nb-sky" aria-hidden="true">{img}{img}</div>')
+def skyline() -> None:
+    # The picture is the theme's --nb-sky, see styles/01-base.css.
+    html('<div class="nb-sky" aria-hidden="true"></div>')
 
 
 def brand(name: str, theme: str) -> None:
