@@ -1,0 +1,143 @@
+/* Native controls: buttons, segmented controls, widget labels, toggle, slider. */
+
+/* ---------- buttons and segmented controls ---------- */
+[data-testid^="stBaseButton"] p,
+[data-testid="stButtonGroup"] button p {
+  font-family: var(--nb-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+[data-testid^="stBaseButton"] {
+  min-height: 44px;
+  border: var(--nb-border) solid var(--nb-line) !important;
+  border-radius: 0 !important;
+  background: var(--nb-surface) !important;
+  color: var(--nb-ink) !important;
+}
+
+[data-testid^="stBaseButton"] p {
+  color: inherit !important;
+}
+
+[data-testid^="stBaseButton"]:hover {
+  box-shadow: 3px 3px 0 var(--nb-shadow);
+}
+
+[data-testid="stBaseButton-primary"] {
+  background: var(--nb-accent) !important;
+  color: var(--nb-on-accent) !important;
+}
+
+[data-testid="stButtonGroup"] button {
+  min-height: 44px;
+  border: var(--nb-border) solid var(--nb-line) !important;
+  border-radius: 0 !important;
+  background: var(--nb-surface) !important;
+  color: var(--nb-ink) !important;
+  padding: 0 16px;
+}
+
+[data-testid="stButtonGroup"] button p {
+  color: inherit !important;
+}
+
+[data-testid="stButtonGroup"] button:hover {
+  box-shadow: none;
+}
+
+[data-testid="stButtonGroup"] button[aria-checked="true"],
+[data-testid="stBaseButton-segmented_controlActive"] {
+  background: var(--nb-selected) !important;
+  color: var(--nb-on-selected) !important;
+}
+
+[data-testid="stButtonGroup"] {
+  gap: 0;
+}
+
+[data-testid="stButtonGroup"] label[data-baseweb] {
+  display: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--nb-accent) !important;
+  outline-offset: 2px;
+}
+
+/* ---------- widget labels ---------- */
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] {
+  font-family: var(--nb-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--nb-label-spacing);
+  font-size: 0.72rem;
+  color: var(--nb-muted);
+}
+
+/* ---------- toggle ---------- */
+[data-testid="stCheckbox"] label {
+  align-items: center;
+  min-height: 44px;
+  gap: 10px;
+}
+
+[data-testid="stCheckbox"] label p {
+  font-family: var(--nb-mono);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--nb-ink) !important;
+}
+
+[data-testid="stCheckbox"] label > span:first-child + div {
+  width: 44px !important;
+  height: 24px !important;
+  border-radius: 0 !important;
+  border: var(--nb-border) solid var(--nb-line) !important;
+  background: var(--nb-surface) !important;
+  flex: none;
+  box-sizing: border-box;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+[data-testid="stCheckbox"] label > span:first-child + div > div {
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 2px !important;
+  border-radius: 0 !important;
+  background: var(--nb-ink) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  left: auto !important;
+}
+
+[data-testid="stCheckbox"] label:has(input:checked) > span:first-child + div {
+  background: var(--nb-accent) !important;
+  justify-content: flex-end;
+}
+
+[data-testid="stCheckbox"] label:has(input:checked) > span:first-child + div > div {
+  background: var(--nb-on-accent) !important;
+}
+
+/* ---------- slider ---------- */
+[data-testid="stSlider"] [role="slider"] {
+  border-radius: 0 !important;
+  background: var(--nb-accent) !important;
+  border: var(--nb-border) solid var(--nb-line) !important;
+  box-shadow: none !important;
+}
+
+[data-testid="stSliderThumbValue"],
+[data-testid="stSliderTickBarMin"],
+[data-testid="stSliderTickBarMax"] {
+  color: var(--nb-soft) !important;
+  font-family: var(--nb-mono);
+}

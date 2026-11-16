@@ -1,0 +1,89 @@
+/* File uploader: the whole card is the drop target, with the doctor cat on it. */
+
+[data-testid="stFileUploader"] {
+  width: 100%;
+}
+
+[data-testid="stFileUploaderDropzone"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 460px;
+  padding: 24px;
+  border: var(--nb-border) dashed var(--nb-line) !important;
+  border-radius: 0 !important;
+  background: var(--nb-surface) !important;
+  text-align: center;
+}
+
+[data-testid="stFileUploaderDropzone"]::before {
+  content: "";
+  width: 192px;
+  height: 300px;
+  flex: none;
+  background: var(--nb-cat) center / contain no-repeat;
+  image-rendering: pixelated;
+}
+
+[data-testid="stFileUploaderDropzoneInstructions"] {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+}
+
+[data-testid="stFileUploaderDropzoneInstructions"] * {
+  display: none;
+}
+
+[data-testid="stFileUploaderDropzoneInstructions"]::before {
+  content: "Przeciągnij zdjęcie tutaj";
+  font-family: var(--nb-mono);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--nb-ink);
+}
+
+[data-testid="stFileUploaderDropzoneInstructions"]::after {
+  content: "JPG, PNG lub WEBP, do 10 MB. Zdjęcie jest przetwarzane tylko w pamięci.";
+  font-size: 14px;
+  color: var(--nb-soft);
+  max-width: 44ch;
+}
+
+[data-testid="stFileUploaderDropzone"] > span {
+  order: 2;
+}
+
+[data-testid="stFileUploaderDropzone"] button {
+  background: var(--nb-accent) !important;
+  color: var(--nb-on-accent) !important;
+}
+
+[data-testid="stFileUploaderDropzone"] button span:has(> [data-testid="stIconMaterial"]) {
+  display: none;
+}
+
+[data-testid="stFileUploaderDropzone"] button p {
+  font-size: 0 !important;
+}
+
+[data-testid="stFileUploaderDropzone"] button p::after {
+  content: "Wybierz zdjęcie";
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  [data-testid="stFileUploaderDropzone"] {
+    min-height: 340px;
+  }
+  [data-testid="stFileUploaderDropzone"]::before {
+    width: 96px;
+    height: 150px;
+  }
+}

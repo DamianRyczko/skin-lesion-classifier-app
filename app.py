@@ -1,5 +1,3 @@
-"""Entry point: theme, top bar, the page.   mise run dev  /  uv run streamlit run app.py"""
-
 import streamlit as st
 from loguru import logger
 

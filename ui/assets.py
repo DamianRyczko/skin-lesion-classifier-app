@@ -1,4 +1,4 @@
-"""Bundled images as data URIs, so components can place them in plain HTML."""
+# Bundled images as data URIs, so components can place them in plain HTML.
 
 import base64
 from functools import cache
@@ -19,7 +19,6 @@ def pixel(name: str) -> str:
     return _uri(PIXEL / f"{name}.png")
 
 
-def sample(code: str) -> str | None:
-    """A HAM10000 photo from assets/samples/, if one exists."""
-    photo = SAMPLES / f"{code}.jpg"
-    return _uri(photo) if photo.exists() else None
+def sample(code: str) -> str:
+    """One HAM10000 photo per class, for the side panel."""
+    return _uri(SAMPLES / f"{code}.jpg")

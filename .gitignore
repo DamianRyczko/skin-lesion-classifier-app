@@ -10,5 +10,4 @@ weights/*
 !weights/skin_lesions_app/
 weights/skin_lesions_app/*
 !weights/skin_lesions_app/.gitkeep
-assets/samples/*
-!assets/samples/README.md
+*:Zone.Identifier

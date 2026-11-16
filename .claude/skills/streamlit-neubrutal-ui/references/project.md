@@ -7,8 +7,8 @@ Keep current. Claude reads this before writing UI copy or deciding what a page s
 Skin lesion classifier app: a study project (computer engineering, medical IT specialisation). Polish-language
 Streamlit app classifying skin lesions into the 7 HAM10000 classes. It is not published.
 
-- The trained models live in `weights/skin_lesions_app/`, git-ignored. Without that folder `model.py` serves
-  a mock, and results are tagged `ui.tag("Dane przykładowe")` automatically while `ModelSpec.mock` is true.
+- The trained models live in `weights/skin_lesions_app/`, git-ignored. Without them the app stops with an
+  error; there is no mock. Tests run on the tiny package from `tests/tiny_package.py`.
 - UI language: Polish. Reply to the owner in their language.
 
 ## Notices
@@ -28,7 +28,7 @@ Names, tiers and panel texts live in `core/classes.py`, the only source.
 ## Visual motif
 
 Cat City: pixel art cats and a skyline with cat-eared buildings. Two themes: warm white, and cyberpunk
-on dark blue. The doctor cat is clean pixel art about 150 px tall, standing in a white coat with the magnifier, with a cyberpunk version in night vision goggles for the dark theme, shown at exact multiples of its size so pixels stay even. The loading cat is the same character trotting side-on in a ribbon, in the same two versions. `scripts/make_sprites.py` generates all of it.
+on dark blue. The doctor cat is clean pixel art about 150 px tall, standing in a white coat with the magnifier, with a cyberpunk version in night vision goggles for the dark theme, shown at exact multiples of its size so pixels stay even. The loading cat is the same character trotting side-on in a ribbon, in the same two versions. The sprites are saved PNGs in `assets/pixel/`.
 
 ## Pages
 

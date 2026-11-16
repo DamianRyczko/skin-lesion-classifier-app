@@ -1,0 +1,132 @@
+/* Result card: probability rows and the XAI legend. */
+
+.nb-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px 6px;
+}
+
+.nb-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 10px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: var(--nb-ink);
+  background: var(--nb-surface);
+  border: var(--nb-border) solid transparent;
+  border-radius: 0;
+}
+
+.nb-row:hover {
+  border-color: var(--nb-line);
+}
+
+.nb-row.top {
+  background: var(--nb-surface-raised);
+  border-color: var(--nb-line);
+  box-shadow: 5px 5px 0 var(--nb-shadow);
+}
+
+.nb-row.sel {
+  border-color: var(--nb-line);
+  box-shadow: 5px 5px 0 var(--nb-accent);
+}
+
+.nb-rtop {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.nb-rname {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--nb-body);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.nb-rpct {
+  flex: none;
+  font-family: var(--nb-mono);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.nb-row.top .nb-rpct {
+  font-size: 24px;
+}
+
+.nb-meter {
+  display: block;
+  height: 12px;
+  border: var(--nb-border) solid var(--nb-line);
+  background: var(--nb-bg);
+}
+
+.nb-fill {
+  display: block;
+  height: 100%;
+  background: var(--nb-accent);
+}
+
+.nb-fill.high {
+  background: var(--nb-risk);
+}
+
+.nb-hint {
+  padding: 6px 18px 12px;
+  font-size: 13px;
+  color: var(--nb-soft);
+}
+
+.nb-banner {
+  margin: 0 16px 14px;
+  padding: 12px 14px;
+  border: var(--nb-border) solid var(--nb-line);
+  background: var(--nb-surface-raised);
+  font-size: 14px;
+  color: var(--nb-ink);
+}
+
+.nb-banner b {
+  display: block;
+  font-family: var(--nb-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.nb-banner.warn {
+  background: var(--nb-tag-warn);
+  color: var(--nb-tag-ink);
+  border-color: var(--nb-tag-ink);
+}
+
+/* XAI legend */
+.nb-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--nb-mono);
+  font-size: 11px;
+  color: var(--nb-soft);
+}
+
+.nb-scale {
+  display: flex;
+  flex: 1 1 auto;
+  height: 12px;
+  border: var(--nb-border) solid var(--nb-line);
+}
+
+.nb-scale span {
+  flex: 1 1 0;
+}

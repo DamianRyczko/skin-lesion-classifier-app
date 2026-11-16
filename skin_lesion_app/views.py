@@ -1,37 +1,21 @@
-import io
-from pathlib import Path
-from typing import Any, BinaryIO
+from typing import Any
 
 import numpy as np
-from PIL import Image, ImageOps
+from PIL import Image
 
-# HAM10000 images are 600 x 450 and every model saw them at that scale; uploads are brought to the same
-# scale first, so the crop-based views (zoom in, shifts) cut the same regions as during the TTA search.
 TRAIN_LONG_SIDE = 600
-MAX_ASPECT = 4 / 3  # training crops covered aspect ratios 3:4 .. 4:3
+MAX_ASPECT = 4 / 3
 GRAY = np.array([0.2989, 0.587, 0.114], dtype=np.float32)
 BILINEAR = Image.Resampling.BILINEAR
 
-ImageSource = str | Path | bytes | bytearray | BinaryIO | Image.Image | np.ndarray
 
-
-def load_image(source: ImageSource) -> Image.Image:
-    """Path, bytes, file object, PIL image or HxWx3 uint8 array -> RGB PIL image at training scale."""
-    if isinstance(source, Image.Image):
-        img = source
-    elif isinstance(source, np.ndarray):
-        img = Image.fromarray(source)
-    elif isinstance(source, bytes | bytearray):
-        img = Image.open(io.BytesIO(source))
-    else:
-        img = Image.open(source)
-    img = ImageOps.exif_transpose(img)  # phone photos keep their rotation in EXIF
+def fit_training_scale(img: Image.Image) -> Image.Image:
     img = img.convert("RGB")
     w, h = img.size
-    if w > h * MAX_ASPECT:  # wider than 4:3 -> centre crop
+    if w > h * MAX_ASPECT:
         nw = round(h * MAX_ASPECT)
         img = img.crop(((w - nw) // 2, 0, (w - nw) // 2 + nw, h))
-    elif h > w * MAX_ASPECT:  # taller than 3:4 -> centre crop
+    elif h > w * MAX_ASPECT:
         nh = round(w * MAX_ASPECT)
         img = img.crop((0, (h - nh) // 2, w, (h - nh) // 2 + nh))
     w, h = img.size
@@ -42,8 +26,7 @@ def load_image(source: ImageSource) -> Image.Image:
 
 
 def render_view(img: Image.Image, view: dict[str, Any], size: int) -> np.ndarray:
-    """One TTA view -> float32 array (size, size, 3) in [0, 1]. Same steps as the GPU version used for the search:
-    crop (zoom in / shift) or shrink + mirrored edges (zoom out) -> resize -> rotate -> colour -> 90-degree turns / flip."""
+    """One TTA view as float32 (size, size, 3) in [0, 1], same steps as the notebook's GPU version."""
     w, h = img.size
     if view.get("crop"):
         x0, y0, x1, y1 = view["crop"]
@@ -75,12 +58,11 @@ def render_view(img: Image.Image, view: dict[str, Any], size: int) -> np.ndarray
 
 
 def to_input(views: list[np.ndarray], mean: list[float], std: list[float]) -> np.ndarray:
-    """Rendered HxWx3 views -> float32 NCHW batch, normalised."""
+    """HxWx3 views -> normalised float32 NCHW batch."""
     mean_ = np.asarray(mean, dtype=np.float32)
     std_ = np.asarray(std, dtype=np.float32)
     return np.stack([((x - mean_) / std_).transpose(2, 0, 1) for x in views]).astype(np.float32)
 
 
 def view_batch(img: Image.Image, views: list[dict[str, Any]], size: int, mean: list[float], std: list[float]) -> np.ndarray:
-    """All views of one image for one model -> float32 NCHW batch, normalised."""
     return to_input([render_view(img, v, size) for v in views], mean, std)

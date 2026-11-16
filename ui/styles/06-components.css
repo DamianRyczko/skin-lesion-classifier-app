@@ -1,0 +1,177 @@
+/* Small HTML pieces from components.py: header, steps, tags, status, bars, tips. */
+
+.nb-mono {
+  font-family: var(--nb-mono);
+}
+
+.nb-eyebrow {
+  font-family: var(--nb-mono);
+  font-size: 12px;
+  letter-spacing: var(--nb-label-spacing);
+  color: var(--nb-muted);
+  text-transform: uppercase;
+}
+
+.nb-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px 24px;
+}
+
+.nb-header h1 {
+  margin: 4px 0 0;
+  padding: 0;
+  font-family: var(--nb-mono);
+  font-size: 34px;
+  line-height: 1.1;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--nb-ink);
+}
+
+.nb-header-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.nb-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.nb-steps li {
+  margin: 0;
+  padding: 4px 10px;
+  border: var(--nb-border) solid var(--nb-line);
+  font-family: var(--nb-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--nb-muted);
+  background: var(--nb-surface);
+}
+
+.nb-steps li.on {
+  background: var(--nb-tag-highlight);
+  color: var(--nb-tag-ink);
+}
+
+.nb-lbl {
+  font-family: var(--nb-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: var(--nb-label-spacing);
+  text-transform: uppercase;
+  color: var(--nb-ink);
+}
+
+.nb-tag {
+  display: inline-block;
+  font-family: var(--nb-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border: var(--nb-border-thin) solid var(--nb-tag-ink);
+  color: var(--nb-tag-ink);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+.nb-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--nb-mono);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--nb-ink);
+}
+
+.nb-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.nb-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 18px;
+  padding: 10px 16px;
+  border: var(--nb-border) solid var(--nb-line);
+  background: var(--nb-surface);
+  font-family: var(--nb-mono);
+  font-size: 12px;
+  color: var(--nb-soft);
+}
+
+.nb-bar-end {
+  margin-left: auto;
+}
+
+.nb-bar-inside {
+  border: none;
+  border-top: var(--nb-border) solid var(--nb-line);
+}
+
+.nb-note {
+  font-size: 13px;
+  color: var(--nb-soft);
+}
+
+.nb-note b {
+  color: var(--nb-ink);
+}
+
+.nb-disc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  padding: 10px 16px;
+  border: var(--nb-border) dashed var(--nb-line);
+  font-size: 13px;
+  color: var(--nb-soft);
+}
+
+.nb-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 16px;
+  list-style: none;
+  font-size: 14px;
+  color: var(--nb-soft);
+}
+
+.nb-tips li {
+  margin: 0;
+  padding-left: 36px;
+  background: var(--nb-paw) left 1px / 24px 24px no-repeat;
+  image-rendering: pixelated;
+}
+
+@media (max-width: 900px) {
+  .nb-header h1 {
+    font-size: 24px;
+  }
+  .nb-header-side {
+    align-items: flex-start;
+  }
+}

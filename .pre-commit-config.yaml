@@ -17,7 +17,7 @@ repos:
         types: [python]
       - id: ui-style
         name: UI style rules
-        entry: uv run python .claude/skills/streamlit-neubrutal-ui/scripts/check_style.py app.py ui_demo.py model.py pages core
+        entry: uv run python .claude/skills/streamlit-neubrutal-ui/scripts/check_style.py app.py model.py pages core
         language: unsupported
         types: [python]
         pass_filenames: false

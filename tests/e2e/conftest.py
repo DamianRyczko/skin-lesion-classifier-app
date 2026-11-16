@@ -1,19 +1,21 @@
-"""Starts the real app once for the browser tests."""
+"""Starts the app once, on the tiny package from tests/conftest.py, for the browser tests."""
 
 import os
 import socket
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 from pathlib import Path
 
 import pytest
 
-from tests.tiny_package import write_notebook_package, write_package
+from tests.tiny_package import draw_lesion
 
 ROOT = Path(__file__).resolve().parents[2]
-PHOTO = ROOT / "tests" / "fixtures" / "lesion.jpg"
+PHOTO = Path(tempfile.mkdtemp(prefix="skin_app_photo_")) / "lesion.jpg"
+draw_lesion((960, 720)).save(PHOTO, quality=90)
 
 
 def _free_port() -> int:
@@ -22,12 +24,13 @@ def _free_port() -> int:
         return sock.getsockname()[1]
 
 
-def _serve(**env: str):
+@pytest.fixture(scope="session")
+def base_url():
     port = _free_port()
     server = subprocess.Popen(
         [sys.executable, "-m", "streamlit", "run", "app.py", "--server.headless=true", f"--server.port={port}"],
         cwd=ROOT,
-        env={**os.environ, **env},
+        env=os.environ,  # SKIN_APP_PACKAGE: the tiny package from tests/conftest.py
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
@@ -41,23 +44,6 @@ def _serve(**env: str):
     yield url
     server.terminate()
     server.wait(timeout=10)
-
-
-@pytest.fixture(scope="session")
-def base_url():
-    yield from _serve(SKIN_APP_MOCK_LOAD="0.3", SKIN_APP_MOCK_VIEW="0.02")
-
-
-@pytest.fixture(scope="session")
-def package_url(tmp_path_factory):
-    """The same app on a real model package."""
-    yield from _serve(SKIN_APP_PACKAGE=str(write_package(tmp_path_factory.mktemp("weights") / "skin_lesions_app")))
-
-
-@pytest.fixture(scope="session")
-def notebook_url(tmp_path_factory):
-    """The same app on the notebook's app_package.json."""
-    yield from _serve(SKIN_APP_PACKAGE=str(write_notebook_package(tmp_path_factory.mktemp("weights") / "skin_lesions_app")))
 
 
 class App:
@@ -83,12 +69,6 @@ class App:
     def to_result(self):
         return self.open().upload().analyze()
 
-    def segment(self, text: str):
-        return self.page.locator('[data-testid="stButtonGroup"] button', has_text=text)
-
-    def css(self, selector: str, prop: str) -> str:
-        return self.page.locator(selector).first.evaluate(f"e => getComputedStyle(e).{prop}")
-
     def assert_healthy(self):
         assert self.page.locator('[data-testid="stException"]').count() == 0
 
@@ -97,15 +77,3 @@ class App:
 def app(page, base_url):
     yield App(page, base_url)
     App(page, base_url).assert_healthy()
-
-
-@pytest.fixture
-def package_app(page, package_url):
-    yield App(page, package_url)
-    App(page, package_url).assert_healthy()
-
-
-@pytest.fixture
-def notebook_app(page, notebook_url):
-    yield App(page, notebook_url)
-    App(page, notebook_url).assert_healthy()

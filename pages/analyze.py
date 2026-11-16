@@ -1,5 +1,3 @@
-"""Upload -> crop -> analysis -> result."""
-
 import streamlit as st
 from loguru import logger
 from PIL import Image
@@ -10,19 +8,20 @@ from core.imaging import ALLOWED_TYPES, ImageError, apply_crop, default_box, ima
 from core.inference import Prediction, analyze, explain
 from core.xai import overlay
 from model import MODELS, PREDICTOR, is_loaded, load_model
+from skin_lesion_app.config import DEFAULT_LEVEL, LEVELS
+from skin_lesion_app.explain import GRID
 from ui import components as ui
 from ui import widgets
 
 STEPS = ("1 Zdjęcie", "2 Kadrowanie", "3 Wynik")
 STEP_INDEX = {"upload": 0, "crop": 1, "result": 2}
 DISPLAY_SIDE = 720
-LEVEL_LABELS = {"fast": "Bez TTA", "balanced": "TTA 4", "best": "TTA 12"}
 
 s = st.session_state
 s.setdefault("step", "upload")
-s.setdefault("upload_round", 0)  # a new key is what clears st.file_uploader
+s.setdefault("upload_round", 0)
 s.setdefault("model_id", PREDICTOR.default_option)
-s.setdefault("level", PREDICTOR.default_level)
+s.setdefault("level", DEFAULT_LEVEL)
 s.setdefault("results", {})
 s.setdefault("heatmaps", {})
 s.setdefault("picked", None)
@@ -84,8 +83,7 @@ def on_xai_change() -> None:
 
 
 def model_control() -> DeltaGenerator:
-    """The selector, plus a slot for its status: that is only known once the step has run."""
-    s.model_choice = s.model_id  # the widgets' state is dropped whenever the upload step hides them
+    s.model_choice = s.model_id
     s.level_choice = s.level
     with st.container(key="nbctrl", horizontal=True):
         ui.label("Model")
@@ -101,8 +99,8 @@ def model_control() -> DeltaGenerator:
         ui.label("TTA")
         st.segmented_control(
             "TTA",
-            PREDICTOR.levels,
-            format_func=LEVEL_LABELS.__getitem__,
+            list(LEVELS),
+            format_func=lambda level: "Bez TTA" if LEVELS[level] == 1 else f"TTA {LEVELS[level]}",
             key="level_choice",
             required=True,
             label_visibility="collapsed",
@@ -113,7 +111,7 @@ def model_control() -> DeltaGenerator:
 
 def model_status(slot: DeltaGenerator) -> None:
     label = MODELS[s.model_id].label
-    slot.html(ui.status(True, f"{label} załadowany") if is_loaded(s.model_id) else ui.mono(f"{label} załaduje się przy analizie"))
+    slot.html(ui.status(f"{label} załadowany") if is_loaded(s.model_id) else ui.mono(f"{label} załaduje się przy analizie"))
 
 
 def upload_step() -> None:
@@ -159,7 +157,6 @@ def crop_step() -> None:
 
 
 def run_analysis() -> Prediction:
-    """Result for the current crop and model, with the loading panel while it is computed."""
     result_key = (s.crop_key, s.model_id, s.level)
     if result_key not in s.results:
         spec = MODELS[s.model_id]
@@ -190,7 +187,15 @@ def shown_photo(prediction: Prediction, display: Image.Image) -> Image.Image:
             loader = ui.Loader("xai")
 
             def on_step(done: int, total: int) -> None:
-                loader.update(f"Mapa XAI: {spec.label}", f"Zasłanianie fragmentów {done} z {total}", done, total)
+                # done counts grid rows over all of the option's models
+                model = max(done - 1, 0) // GRID + 1
+                row = done - (model - 1) * GRID
+                where = (
+                    f"model {model} z {len(spec.members)}, wiersz {row} z {GRID}"
+                    if len(spec.members) > 1
+                    else f"wiersz {row} z {GRID}"
+                )
+                loader.update(f"Mapa XAI: {spec.label}", f"Zasłanianie fragmentów: {where}", done, total)
 
             on_step(0, 1)
             s.heatmaps[heat_key] = explain(spec, s.crop, code, on_step)
@@ -235,13 +240,11 @@ def photo_panel(prediction: Prediction) -> None:
 
 
 def result_panel(prediction: Prediction) -> str | None:
-    """Returns the class code clicked in this run, if any."""
+    # Returns the class code clicked in this run, if any.
     spec = MODELS[prediction.model_id]
     with ui.panel("result"):
         with st.container(key="nbphead_result", horizontal=True):
             ui.label(f"Wynik: {spec.label}")
-            if spec.mock:
-                ui.html(ui.tag("Dane przykładowe"))
         rows = [
             dict(
                 code=code,
@@ -260,8 +263,6 @@ def result_panel(prediction: Prediction) -> str | None:
         if prediction.consult:
             if prediction.risk >= RISK_THRESHOLD:
                 reason = f"Klasy złośliwe i przednowotworowe razem: {ui.pct(prediction.risk)}."
-            elif prediction.melanoma:
-                reason = "Model nie może wykluczyć czerniaka."
             else:
                 reason = f"Najwyższy wynik: {CLASSES[prediction.top].name}."
             ui.banner("Zalecana konsultacja z dermatologiem", f"{reason} Pokaż tę zmianę lekarzowi.", warn=True)
@@ -271,9 +272,7 @@ def result_panel(prediction: Prediction) -> str | None:
                 f"Klasy ryzyka razem: {ui.pct(prediction.risk)}, poniżej progu {ui.pct(RISK_THRESHOLD)}.",
                 warn=False,
             )
-        ui.status_bar(
-            f"Widoki TTA na model: {prediction.n_views}", "średnia prawdopodobieństw", end="HAM10000 · 7 klas", inside=True
-        )
+        ui.status_bar(f"Widoki TTA na model: {prediction.n_views}", "średnia prawdopodobieństw", end="HAM10000 · 7 klas")
     return clicked
 
 

@@ -1,5 +1,3 @@
-"""The 7 HAM10000 classes: Polish names, recommendation levels and panel texts."""
-
 from dataclasses import dataclass
 
 # Sum of the high-risk classes at which the app recommends a dermatologist,
@@ -88,10 +86,9 @@ HIGH_RISK = tuple(code for code, lesion in CLASSES.items() if lesion.high_risk)
 
 
 def risk_score(probs: dict[str, float]) -> float:
-    """Summed probability of the high-risk classes."""
     return sum(probs[code] for code in HIGH_RISK)
 
 
 def needs_consultation(probs: dict[str, float]) -> bool:
-    """The high-risk classes reach the threshold together, or one of them is the top prediction."""
+    # The high-risk classes reach the threshold together, or one of them is on top.
     return risk_score(probs) >= RISK_THRESHOLD or max(probs, key=probs.__getitem__) in HIGH_RISK

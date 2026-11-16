@@ -1,9 +1,5 @@
-"""Terminal logging: run the site and watch what it does.
-
-Modules import `logger` from loguru directly. Each event carries a short
-session id, so parallel browser tabs stay readable. Set LOG_LEVEL=DEBUG to
-also see each TTA view.
-"""
+# Each log line carries a short session id, so parallel browser tabs stay readable.
+# LOG_LEVEL=DEBUG also shows each TTA view.
 
 import os
 import sys
@@ -21,13 +17,13 @@ _configured = False
 
 
 def _add_session_id(record: Record) -> None:
-    """Read at log time, so widget callbacks (which run before the script) get it too."""
+    # Read at log time, so widget callbacks (which run before the script) get it too.
     ctx = get_script_run_ctx(suppress_warning=True)
     record["extra"]["sid"] = ctx.session_id[:6] if ctx else "-"
 
 
 def setup_logging() -> None:
-    """Configure once; Streamlit reruns app.py on every interaction."""
+    # Once: Streamlit reruns app.py on every interaction.
     global _configured
     if _configured:
         return

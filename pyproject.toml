@@ -33,13 +33,9 @@ force-exclude = true    # also when the editor or pre-commit names a file direct
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 
-[tool.ruff.lint.per-file-ignores]
-"ui/theme.py" = ["E501"]    # CSS
-"scripts/*" = ["E501"]      # sprite data and palettes
-
 [tool.mypy]
 python_version = "3.14"
-files = ["app.py", "ui_demo.py", "model.py", "skin_lesion_app", "core", "pages", "ui", "scripts", "tests"]
+files = ["app.py", "model.py", "skin_lesion_app", "core", "pages", "ui", "tests"]
 explicit_package_bases = true
 mypy_path = ".:tests/e2e"
 check_untyped_defs = true
@@ -48,9 +44,9 @@ warn_redundant_casts = true
 no_implicit_optional = true
 
 [[tool.mypy.overrides]]
-module = ["app", "ui_demo", "model", "skin_lesion_app.*", "core.*", "pages.*", "ui.*"]
+module = ["app", "model", "skin_lesion_app.*", "core.*", "pages.*", "ui.*"]
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
-module = ["onnxruntime.*", "pandas.*", "kagglehub.*"]   # no type information; pandas and kagglehub are Colab-only
+module = ["onnxruntime.*"]   # no type information
 ignore_missing_imports = true

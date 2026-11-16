@@ -35,30 +35,34 @@ Silence one line with `# nb: ignore` only with a reason in a comment.
 
 ## Where things live
 
-- `ui/tokens.py`: every value (colors in `LIGHT` and `DARK`, fonts, sizes). Change the look here, then run `scripts/sync_theme.py`.
-- `ui/theme.py`: the only place with CSS and with selectors for Streamlit internals (`data-testid`,
-  `st-key-*`). If a Streamlit upgrade changes the DOM, fix selectors here. Current selectors were
-  checked against Streamlit 1.66.
+- `ui/tokens.py`: colors (in `LIGHT` and `DARK`) and font names. Change the look here, then run `scripts/sync_theme.py`.
+- `ui/styles/*.css`: all CSS, one file per area, loaded in name order (the number prefix is the cascade
+  order). Sizes and font stacks are at the top of `01-base.css`. Each file ends with its own narrow-layout
+  (`max-width: 900px`) rules. The only place with selectors for Streamlit internals (`data-testid`,
+  `st-key-*`); if a Streamlit upgrade changes the DOM, fix selectors here. Current selectors were checked
+  against Streamlit 1.66. Colors are `var(--nb-*)`, never hex. No less-than sign anywhere, not even in a
+  comment (DOMPurify drops the whole block).
+- `ui/theme.py`: puts `ui/styles/` on the page with the active palette as `--nb-*` variables.
 - `ui/components.py`: all HTML. Components escape text (`_e`) and return `Html` for fragments.
 - `ui/widgets.py`: Components v2 pieces (cropper, probability rows). No iframe, so they follow the theme.
+  Their JavaScript is in `ui/js/`.
 - `ui/assets.py`: images as data URIs.
-- Card/panel styling works through container keys: `st.container(key="nbcard_...")` gets the CSS class
-  `st-key-nbcard_...`. Use `ui.card()` / `ui.panel()` rather than writing these keys by hand.
+- Panel styling works through container keys: `st.container(key="nbpanel_...")` gets the CSS class
+  `st-key-nbpanel_...`. Use `ui.panel()` rather than writing these keys by hand.
 
 ## Known Streamlit quirks
 
-- Horizontal containers turn into columns below 640px; `ui/theme.py` keeps the app's own as rows.
+- Horizontal containers turn into columns below 640px; `ui/styles/01-base.css` keeps the app's own as rows.
 - `streamlit-cropper` overflows narrow screens and ignores touch; that is why `ui/widgets.py` has its own.
 - AppTest loses state after a callback changes query params. Test the theme click in `tests/e2e/`.
 - Google Fonts are loaded by the theme from the internet; offline the app falls back to system mono/sans.
-- After upgrading Streamlit: run `ui_demo.py` in both themes and `mise run e2e`, fix `ui/theme.py` if needed,
+- After upgrading Streamlit: run the app in both themes and `mise run e2e`, fix `ui/styles/` if needed,
   update the pin in `pyproject.toml`.
 
 ## Review checklist (before handing over)
 
 - [ ] `check_style.py` passes.
 - [ ] App starts headless, no tracebacks in the log.
-- [ ] One `page_header` per page; blocks separated by `section_label`.
+- [ ] One `page_header` per page.
 - [ ] Every status has a text label; no text in accent colors.
-- [ ] New components documented in `components.md` and shown in `ui_demo.py`.
-- [ ] Sample data clearly tagged (`ui.tag("Dane przykładowe")`) until real data is wired in.
+- [ ] New components documented in `components.md`.

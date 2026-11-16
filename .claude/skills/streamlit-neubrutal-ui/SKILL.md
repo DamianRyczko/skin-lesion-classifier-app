@@ -33,9 +33,9 @@ building, and prefer what is there. Dependencies are managed with uv (`pyproject
    ```
    `setup_page()` is called once, in `app.py`, before `nav.run()`. Pages do not
    call it again.
-3. Compose pages from `ui.components`, `ui.charts` and native widgets
-   (`st.segmented_control`, `st.columns`, `st.dataframe`, inputs). Use
-   `ui_demo.py` as the reference for pieces and `pages/analyze.py` for patterns.
+3. Compose pages from `ui.components` and native widgets
+   (`st.segmented_control`, `st.columns`, inputs). Use
+   `pages/analyze.py` as the reference for patterns.
 4. **Hard rules** (the linter enforces them outside `ui/`):
    - no hex colors in pages: use `C.*` / `TAG.*` from `ui.tokens` (CSS variables, so both themes work);
    - no `st.markdown(..., unsafe_allow_html=True)`, `st.html`, `<style>`:
@@ -44,13 +44,12 @@ building, and prefer what is there. Dependencies are managed with uv (`pyproject
    - never target generated classes (`st-emotion-cache-*`, `css-*`);
    - status is never color alone: dot + text label.
 5. **Need something the kit does not have?** Do not inline it in the page.
-   Add it to `ui/components.py` (new CSS classes go in `ui/theme.py`, colors
-   from tokens), add an example to the "Komponenty" page of `ui_demo.py`, and
-   document it in `SKILL/references/components.md`. Then use it in the page.
+   Add it to `ui/components.py` (new CSS classes go in the matching `ui/styles/*.css` file, colors
+   from tokens) and document it in `SKILL/references/components.md`. Then use it in the page.
 6. Changing the overall look (a color, a font): edit `ui/tokens.py` only, in BOTH palettes, then
    `uv run python SKILL/scripts/sync_theme.py` to regenerate `.streamlit/config.toml`.
 7. Streamlit cannot switch themes from Python. `config.toml` stays on the light palette and
-   `ui/theme.py` paints every native widget from the variables. A new kind of native widget needs
+   `ui/styles/` paints every native widget from the variables. A new kind of native widget needs
    rules there, or it stays light in the cyberpunk theme.
 
 ## 2. Check before handing over

@@ -1,0 +1,97 @@
+/* Loader: the walking cat and the progress blocks. */
+
+[class*="st-key-nbload_"] {
+  max-width: 620px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 24px;
+  gap: 14px;
+  align-items: center;
+  text-align: center;
+  background: var(--nb-surface);
+  border: var(--nb-border) solid var(--nb-line);
+  box-shadow: 6px 6px 0 var(--nb-shadow);
+  box-sizing: border-box;
+}
+
+[class*="st-key-nbload_"] [data-testid="stElementContainer"] {
+  width: 100%;
+}
+
+.nb-track {
+  position: relative;
+  height: 112px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.nb-walk {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 144px;
+  height: 112px;
+  background: var(--nb-walk) 0 0 / 864px 112px no-repeat;
+  image-rendering: pixelated;
+  animation: nb-walk-steps .5s steps(6) infinite, nb-walk-move 4s linear infinite;
+}
+
+@keyframes nb-walk-steps {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -864px 0;
+  }
+}
+
+@keyframes nb-walk-move {
+  from {
+    transform: translateX(-144px);
+  }
+  to {
+    transform: translateX(480px);
+  }
+}
+
+.nb-big {
+  font-family: var(--nb-mono);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--nb-ink);
+}
+
+.nb-blocks {
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.nb-blocks span {
+  aspect-ratio: 1 / 1;
+  border: var(--nb-border) solid var(--nb-line);
+  background: var(--nb-bg);
+  box-sizing: border-box;
+}
+
+.nb-blocks span.on {
+  background: var(--nb-accent);
+}
+
+.nb-stage {
+  font-family: var(--nb-mono);
+  font-size: 13px;
+  color: var(--nb-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-walk {
+    animation: none !important;
+  }
+}

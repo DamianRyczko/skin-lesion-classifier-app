@@ -1,4 +1,4 @@
-"""Writes a real model package with tiny ONNX networks: the same files build.py writes, a few KB each.
+"""Test data: a real app_package.json with tiny ONNX networks (a few KB each), and a drawn lesion photo.
 
 Each network is average colour -> linear layer -> 7 logits, so the numbers mean nothing,
 but ONNX Runtime really runs them.
@@ -11,9 +11,9 @@ from typing import Any
 import numpy as np
 import onnx
 from onnx import TensorProto, helper, numpy_helper
+from PIL import Image, ImageDraw
 
-from skin_lesion_app import CLASSES, DEFAULT_OPTIONS, LEVELS
-from skin_lesion_app.config import PACKAGE_FORMAT
+from skin_lesion_app.config import CLASS_CODES
 
 VIEWS: list[dict[str, Any]] = [
     {"name": "plain"},
@@ -49,10 +49,8 @@ def tiny_network(seed: int) -> onnx.ModelProto:
     return network
 
 
-def write_notebook_package(
-    folder: Path, tags: tuple[str, ...] = ("custom_resnet", "swin_base", "dinov2_vitb", "seresnext101")
-) -> Path:
-    """The notebook's app_package.json, with .onnx files for the given models only."""
+def write_package(folder: Path, tags: tuple[str, ...] = ("custom_resnet", "swin_base", "dinov2_vitb", "seresnext101")) -> Path:
+    """.onnx files for the given models only."""
     (folder / "onnx").mkdir(parents=True)
     for seed, tag in enumerate(tags):
         onnx.save(tiny_network(seed), folder / "onnx" / f"{tag}.onnx")
@@ -73,7 +71,7 @@ def write_notebook_package(
     all_tags = ("custom_resnet", "swin_base", "dinov2_vitb", "seresnext101", "convnextv2_base", "eva02_base")
     singles = {tag: settings(tag, float(index)) for index, tag in enumerate(all_tags, 1)}
     package = {
-        "classes": CLASSES,
+        "classes": [{"index": i, "code": code} for i, code in enumerate(CLASS_CODES)],
         "ensemble": {
             "members": [singles[tag] for tag in ("convnextv2_base", "eva02_base", "swin_base")],
             "decision_bias": [0.5] * 6 + [0.0],
@@ -86,38 +84,10 @@ def write_notebook_package(
     return folder
 
 
-def write_package(folder: Path, mel_threshold: float = 0.3) -> Path:
-    (folder / "onnx").mkdir(parents=True)
-    tags = sorted({tag for option in DEFAULT_OPTIONS for tag in option["members"]})
-    models = {}
-    for seed, tag in enumerate(tags):
-        onnx.save(tiny_network(seed), folder / "onnx" / f"{tag}.onnx")
-        models[tag] = {
-            "label": tag,
-            "onnx": f"onnx/{tag}.onnx",
-            "img_size": 64,
-            "mean": [0.5, 0.5, 0.5],
-            "std": [0.25, 0.25, 0.25],
-            "tta_views": VIEWS,
-        }
-    settings = {
-        level: {
-            "views": n,
-            "decision_bias": [0.1, 0.1, 0.0, -0.1, 0.2, -0.4, 0.1],
-            "melanoma_thresholds": {"0.90": mel_threshold, "0.95": mel_threshold / 2},
-            "scores": {"test_macro_f1": 0.8},
-        }
-        for level, n in LEVELS.items()
-    }
-    config = {
-        "format": PACKAGE_FORMAT,
-        "classes": CLASSES,
-        "levels": LEVELS,
-        "default_option": "swin",
-        "default_level": "balanced",
-        "models": models,
-        "options": [{**option, "levels": settings} for option in DEFAULT_OPTIONS],
-        "melanoma_warning": {"source": "option", "target_sensitivity": "0.90"},
-    }
-    (folder / "app_config.json").write_text(json.dumps(config), encoding="utf-8")
-    return folder
+def draw_lesion(size: tuple[int, int] = (240, 240)) -> Image.Image:
+    """Skin-coloured photo with a dark blob, off-centre."""
+    width, height = size
+    image = Image.new("RGB", size, (224, 176, 146))
+    box = (70 * width // 240, 60 * height // 240, 170 * width // 240, 150 * height // 240)
+    ImageDraw.Draw(image).ellipse(box, fill=(60, 30, 25))
+    return image

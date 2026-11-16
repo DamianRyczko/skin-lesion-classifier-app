@@ -1,4 +1,4 @@
-"""Decoding, orientation and cropping of uploaded photos. Everything stays in memory."""
+# Uploaded photos stay in memory only.
 
 import base64
 import hashlib
@@ -11,11 +11,10 @@ PREVIEW_SIDE = 1024
 
 
 class ImageError(ValueError):
-    """The upload is not a usable image. The message is shown to the user."""
+    """The message is shown to the user."""
 
 
 def load_image(data: bytes) -> Image.Image:
-    """Decode to RGB with the phone's EXIF rotation applied."""
     try:
         return ImageOps.exif_transpose(Image.open(io.BytesIO(data))).convert("RGB")
     except (UnidentifiedImageError, OSError, SyntaxError, Image.DecompressionBombError) as exc:
@@ -23,7 +22,7 @@ def load_image(data: bytes) -> Image.Image:
 
 
 def image_id(image: Image.Image) -> str:
-    """Short content hash: logs and cache keys."""
+    # Short content hash for logs and cache keys.
     digest = hashlib.sha256()
     digest.update(f"{image.size}".encode())
     digest.update(image.tobytes())
@@ -31,7 +30,7 @@ def image_id(image: Image.Image) -> str:
 
 
 def default_box(image: Image.Image) -> dict[str, float]:
-    """Centred square covering 80% of the shorter side, as fractions of width and height."""
+    # Centred square over 80% of the shorter side, as fractions of width and height.
     width, height = image.size
     side = 0.8 * min(width, height)
     w, h = side / width, side / height
@@ -39,7 +38,7 @@ def default_box(image: Image.Image) -> dict[str, float]:
 
 
 def apply_crop(image: Image.Image, box: dict[str, float]) -> Image.Image:
-    """Crop by a fractional box. The result is forced square: the model input is."""
+    # Forced square: the model input is.
     width, height = image.size
     left, top = box["x"] * width, box["y"] * height
     side = max(1, round(min(box["w"] * width, box["h"] * height)))
@@ -49,7 +48,6 @@ def apply_crop(image: Image.Image, box: dict[str, float]) -> Image.Image:
 
 
 def preview_uri(image: Image.Image, side: int = PREVIEW_SIDE) -> str:
-    """Downscaled JPEG data URI for the browser cropper."""
     preview = image.copy()
     preview.thumbnail((side, side))
     buffer = io.BytesIO()

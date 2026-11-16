@@ -1,0 +1,75 @@
+/* Cropper (widgets.py): crop box over the photo. */
+
+.nb-crop {
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+  background: var(--nb-bg);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.nb-crop img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.nb-crop-box {
+  position: absolute;
+  box-sizing: border-box;
+  /* nb: fixed white and black, they sit over any photo */
+  border: 2px solid #FFFFFF;
+  cursor: move;
+  touch-action: none;
+  box-shadow: 0 0 0 9999px rgba(8, 10, 26, .55);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .5), rgba(255, 255, 255, .5)),
+    linear-gradient(rgba(255, 255, 255, .5), rgba(255, 255, 255, .5)),
+    linear-gradient(rgba(255, 255, 255, .5), rgba(255, 255, 255, .5)),
+    linear-gradient(rgba(255, 255, 255, .5), rgba(255, 255, 255, .5));
+  background-size: 1px 100%, 1px 100%, 100% 1px, 100% 1px;
+  background-position: 33.3% 0, 66.6% 0, 0 33.3%, 0 66.6%;
+  background-repeat: no-repeat;
+}
+
+.nb-crop-h {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  background: var(--nb-tag-highlight);
+  border: 2px solid var(--nb-tag-ink);
+  touch-action: none;
+}
+
+.nb-crop-h::after {
+  content: "";
+  position: absolute;
+  inset: -13px;
+}
+
+.nb-crop-h.nw {
+  top: -10px;
+  left: -10px;
+  cursor: nwse-resize;
+}
+
+.nb-crop-h.ne {
+  top: -10px;
+  right: -10px;
+  cursor: nesw-resize;
+}
+
+.nb-crop-h.sw {
+  bottom: -10px;
+  left: -10px;
+  cursor: nesw-resize;
+}
+
+.nb-crop-h.se {
+  bottom: -10px;
+  right: -10px;
+  cursor: nwse-resize;
+}

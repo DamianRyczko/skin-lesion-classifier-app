@@ -1,4 +1,4 @@
-"""Draws an attention heatmap over the photo, in blocky steps that suit the pixel style."""
+# Heatmap over the photo, in blocky steps that suit the pixel style.
 
 import numpy as np
 from PIL import Image
@@ -14,7 +14,6 @@ def _scale_rgb() -> np.ndarray:
 
 
 def overlay(image: Image.Image, heatmap: np.ndarray, opacity: float) -> Image.Image:
-    """Blend the heatmap over the image. opacity in 0..1 scales the whole layer."""
     resized = Image.fromarray((np.clip(heatmap, 0, 1) * 255).astype(np.uint8)).resize((_GRID, _GRID), Image.Resampling.BILINEAR)
     heat = np.asarray(resized, dtype=np.float32) / 255
     peak = float(heat.max())

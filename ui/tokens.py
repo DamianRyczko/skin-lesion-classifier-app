@@ -1,14 +1,6 @@
-"""Design tokens: the single source of truth for the app's look.
+"""Colours of both themes. theme.py writes the active one as --nb-* CSS variables, so C.* are var() references.
 
-Every color, font and size used anywhere in the app comes from here.
-Pages and components import C / TAG and never contain hex values.
-
-The app has two themes, so C.* are CSS variables, not colors. theme.py writes
-the active palette (LIGHT or DARK) into :root on every run, which is what
-makes the switch work without touching the rest of the CSS.
-
-After changing LIGHT, regenerate the Streamlit base theme:
-    uv run python .claude/skills/streamlit-neubrutal-ui/scripts/sync_theme.py
+After changing LIGHT, regenerate .streamlit/config.toml with .claude/skills/streamlit-neubrutal-ui/scripts/sync_theme.py.
 """
 
 LIGHT = {
@@ -26,18 +18,13 @@ LIGHT = {
     "ON_ACCENT": "#2B2B2B",  # text on ACCENT
     "SELECTED": "#2B2B2B",  # chosen segment
     "ON_SELECTED": "#F4EFEA",
-    "HIGHLIGHT": "#FFE14D",  # yellow tags
     "RISK": "#FF9538",  # meters of the high-risk classes
     "OK": "#1F9D55",  # good status dot
-    "BAD": "#D64545",  # error dot
-    "BAD_TEXT": "#B3261E",  # red text that passes contrast
     "SCRIM": "rgba(43, 43, 43, .38)",
     "TAG_INK": "#2B2B2B",  # text on any tag
     "TAG_INFO": "#CDEBFF",
-    "TAG_NEUTRAL": "#F4EFEA",
     "TAG_HIGHLIGHT": "#FFE14D",
     "TAG_WARN": "#FFC48F",
-    "TAG_BAD": "#F8C9C9",
 }
 
 DARK = {
@@ -55,18 +42,13 @@ DARK = {
     "ON_ACCENT": "#06102B",
     "SELECTED": "#22E3F2",
     "ON_SELECTED": "#06102B",
-    "HIGHLIGHT": "#FFE14D",
     "RISK": "#FF2E88",
     "OK": "#3DF2A0",
-    "BAD": "#FF5C7A",
-    "BAD_TEXT": "#FF8FA3",
     "SCRIM": "rgba(4, 8, 30, .62)",
     "TAG_INK": "#06102B",
     "TAG_INFO": "#8FF1FA",
-    "TAG_NEUTRAL": "#C9D3F2",
     "TAG_HIGHLIGHT": "#FFE14D",
     "TAG_WARN": "#FF8FC0",
-    "TAG_BAD": "#FF8FC0",
 }
 
 # XAI heatmap, low to high attention. Same in both themes: it sits on the photo.
@@ -101,11 +83,8 @@ class C:
     ON_ACCENT = _ref("ON_ACCENT")
     SELECTED = _ref("SELECTED")
     ON_SELECTED = _ref("ON_SELECTED")
-    HIGHLIGHT = _ref("HIGHLIGHT")
     RISK = _ref("RISK")
     OK = _ref("OK")
-    BAD = _ref("BAD")
-    BAD_TEXT = _ref("BAD_TEXT")
     SCRIM = _ref("SCRIM")
 
 
@@ -114,10 +93,7 @@ class TAG:
 
     INK = _ref("TAG_INK")
     INFO = _ref("TAG_INFO")
-    NEUTRAL = _ref("TAG_NEUTRAL")
-    HIGHLIGHT = _ref("TAG_HIGHLIGHT")
     WARN = _ref("TAG_WARN")
-    BAD = _ref("TAG_BAD")
 
 
 class F:
@@ -127,16 +103,3 @@ class F:
     BODY_URL = "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap"
     MONO = "JetBrains Mono"
     MONO_URL = "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
-    MONO_STACK = "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace"
-    BODY_STACK = "'IBM Plex Sans', system-ui, sans-serif"
-
-
-class S:
-    """Sizes and effects."""
-
-    BORDER = "2px"
-    BORDER_THIN = "1px"
-    SHADOW = f"6px 6px 0 {C.SHADOW}"  # hard offset shadow, only for the selected/emphasised element
-    LABEL_SPACING = "0.1em"  # letter-spacing for uppercase mono labels
-    MAX_WIDTH = "1280px"  # main content max width
-    NARROW = "900px"  # below this the layout stacks and the panel comes from the bottom

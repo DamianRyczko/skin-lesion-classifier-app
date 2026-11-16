@@ -1,0 +1,48 @@
+/* Panels and split columns (container keys set by components.py). */
+
+[class*="st-key-nbpanel_"] {
+  border: var(--nb-border) solid var(--nb-line) !important;
+  border-radius: 0 !important;
+  background: var(--nb-surface);
+}
+
+[class*="st-key-nbpanel_"] [data-testid="stImage"] img {
+  border-radius: 0;
+  display: block;
+}
+
+[class*="st-key-nbphead_"] {
+  padding: 6px 16px;
+  border-bottom: var(--nb-border) solid var(--nb-line);
+  justify-content: space-between;
+  min-height: 58px;
+  gap: 4px 12px;
+}
+
+[class*="st-key-nbpbody_"] {
+  padding: 12px 16px;
+  gap: 10px;
+}
+
+[class*="st-key-nbpfoot_"] {
+  padding: 12px 16px;
+  border-top: var(--nb-border) solid var(--nb-line);
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.st-key-nbctrl {
+  gap: 10px 16px;
+  justify-content: flex-start;
+}
+
+@media (max-width: 900px) {
+  [class*="st-key-nbsplit_"] [data-testid="stHorizontalBlock"] {
+    flex-direction: column;
+  }
+  [class*="st-key-nbsplit_"] [data-testid="stColumn"] {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-width: 100% !important;
+  }
+}

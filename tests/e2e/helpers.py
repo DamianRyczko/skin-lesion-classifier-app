@@ -26,12 +26,3 @@ def drag_touch(context, page, dx: float, dy: float) -> None:
         page.wait_for_timeout(20)
     session.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
     page.wait_for_timeout(300)
-
-
-def close_panel(page) -> None:
-    """Escape, once the panel has opened: Streamlit can drop a key pressed during the opening animation."""
-    dialog = page.locator('[data-testid="stDialog"]')
-    dialog.wait_for(timeout=8000)
-    page.locator('[data-testid="stDialog"]:not([data-entering])').wait_for(timeout=8000)
-    page.keyboard.press("Escape")
-    dialog.wait_for(state="detached", timeout=5000)
