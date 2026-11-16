@@ -27,7 +27,6 @@ pythonpath = ["."]
 
 [tool.ruff]
 line-length = 130
-extend-exclude = [".claude"]
 force-exclude = true    # also when the editor or pre-commit names a file directly
 
 [tool.ruff.lint]

@@ -19,7 +19,7 @@
 .nb-crop-box {
   position: absolute;
   box-sizing: border-box;
-  /* nb: fixed white and black, they sit over any photo */
+  /* fixed white and black: they sit over any photo */
   border: 2px solid #FFFFFF;
   cursor: move;
   touch-action: none;

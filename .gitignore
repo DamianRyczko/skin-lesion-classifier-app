@@ -11,3 +11,7 @@ weights/*
 weights/skin_lesions_app/*
 !weights/skin_lesions_app/.gitkeep
 *:Zone.Identifier
+
+# editor and assistant settings
+.vscode/
+.claude/

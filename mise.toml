@@ -26,12 +26,11 @@ description = "Format and auto-fix with ruff"
 run = ["uv run ruff check --fix .", "uv run ruff format ."]
 
 [tasks.check]
-description = "Ruff, mypy and UI style rules, without changing files"
+description = "Ruff and mypy, without changing files"
 run = [
   "uv run ruff check .",
   "uv run ruff format --check .",
   "uv run mypy",
-  "uv run python .claude/skills/streamlit-neubrutal-ui/scripts/check_style.py app.py model.py pages core",
 ]
 
 [tasks.docker]

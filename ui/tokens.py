@@ -1,20 +1,18 @@
 """Colours of both themes. theme.py writes the active one as --nb-* CSS variables, so C.* are var() references.
 
-After changing LIGHT, regenerate .streamlit/config.toml with .claude/skills/streamlit-neubrutal-ui/scripts/sync_theme.py.
+.streamlit/config.toml repeats the LIGHT colours for Streamlit's own base theme: change both together.
 """
 
 LIGHT = {
     "BG": "#F4EFEA",  # app background (warm white)
     "SURFACE": "#FBF9F6",  # cards, panels
     "SURFACE_RAISED": "#FFFFFF",  # selected / emphasised card
-    "SIDEBAR": "#EDE5DC",  # theme base only, the app has no sidebar
     "INK": "#2B2B2B",  # text
     "LINE": "#2B2B2B",  # borders
     "SHADOW": "#2B2B2B",  # hard offset shadows
     "MUTED": "#5F5A54",  # secondary text (>= 4.5:1 on BG)
     "SOFT": "#45413C",  # body copy a bit quieter than INK
     "ACCENT": "#6FC2FF",  # selected state, active nav, meters
-    "ACCENT_DARK": "#1A6FB0",  # accent for links on the background
     "ON_ACCENT": "#2B2B2B",  # text on ACCENT
     "SELECTED": "#2B2B2B",  # chosen segment
     "ON_SELECTED": "#F4EFEA",
@@ -31,14 +29,12 @@ DARK = {
     "BG": "#0A1230",  # dark blue
     "SURFACE": "#101B45",
     "SURFACE_RAISED": "#16245A",
-    "SIDEBAR": "#0D1638",
     "INK": "#E8EEFF",
     "LINE": "#22E3F2",  # neon cyan frames
     "SHADOW": "#FF2E88",  # hard magenta shadows, no glow
     "MUTED": "#A9B6E2",
     "SOFT": "#C9D3F2",
     "ACCENT": "#22E3F2",
-    "ACCENT_DARK": "#8FF1FA",
     "ON_ACCENT": "#06102B",
     "SELECTED": "#22E3F2",
     "ON_SELECTED": "#06102B",
@@ -72,14 +68,12 @@ class C:
     BG = _ref("BG")
     SURFACE = _ref("SURFACE")
     SURFACE_RAISED = _ref("SURFACE_RAISED")
-    SIDEBAR = _ref("SIDEBAR")
     INK = _ref("INK")
     LINE = _ref("LINE")
     SHADOW = _ref("SHADOW")
     MUTED = _ref("MUTED")
     SOFT = _ref("SOFT")
     ACCENT = _ref("ACCENT")
-    ACCENT_DARK = _ref("ACCENT_DARK")
     ON_ACCENT = _ref("ON_ACCENT")
     SELECTED = _ref("SELECTED")
     ON_SELECTED = _ref("ON_SELECTED")
@@ -94,12 +88,3 @@ class TAG:
     INK = _ref("TAG_INK")
     INFO = _ref("TAG_INFO")
     WARN = _ref("TAG_WARN")
-
-
-class F:
-    """Fonts. *_URL are Google Fonts css2 links loaded by the Streamlit theme."""
-
-    BODY = "IBM Plex Sans"
-    BODY_URL = "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap"
-    MONO = "JetBrains Mono"
-    MONO_URL = "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
